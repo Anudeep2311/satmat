@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:newapp/pages/home_screen.dart';
 import 'package:newapp/services/auth_service.dart';
+import 'package:newapp/widgets/const_sizedbox.dart';
+import 'package:newapp/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
 import 'signup_screen.dart';
 
@@ -30,13 +32,15 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  TextField(
+                  CustomTextField(
                     controller: _emailController,
-                    decoration: const InputDecoration(labelText: 'Email'),
+                    labelText: 'Email',
+                    obscureText: false,
                   ),
-                  TextField(
+                  const MidSizedBoxHeight(),
+                  CustomTextField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(labelText: 'Password'),
+                    labelText: 'Password',
                     obscureText: true,
                   ),
                   const SizedBox(height: 20),
@@ -66,8 +70,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const SignupScreen()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => const SignupScreen()));
                     },
                     child: const Text('Don\'t have an account? Sign up'),
                   ),

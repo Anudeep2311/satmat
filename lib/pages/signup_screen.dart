@@ -4,6 +4,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:newapp/pages/home_screen.dart';
 import 'package:newapp/services/auth_service.dart';
+import 'package:newapp/widgets/const_sizedbox.dart';
+import 'package:newapp/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
 
@@ -30,6 +32,7 @@ class _SignupScreenState extends State<SignupScreen> {
         await _imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
+        _image = File(pickedFile.path);
         imagePath = pickedFile.path;
       });
     }
@@ -110,27 +113,41 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    TextField(
+                    CustomTextField(
                       controller: _emailController,
-                      decoration: const InputDecoration(labelText: 'Email'),
+                      labelText: 'Email',
+                      obscureText: false,
+                      textInputType: TextInputType.emailAddress,
                     ),
-                    TextField(
+                    const MidSizedBoxHeight(),
+                    CustomTextField(
                       controller: _usernameController,
-                      decoration: const InputDecoration(labelText: 'Username'),
+                      labelText: 'Username',
+                      obscureText: false,
+                      textInputType: TextInputType.name,
                     ),
-                    TextField(
+                    const MidSizedBoxHeight(),
+                    CustomTextField(
                       controller: _mobileController,
-                      decoration: const InputDecoration(labelText: 'Mobile'),
+                      labelText: 'Mobile Number',
+                      obscureText: false,
+                      textInputType: TextInputType.phone,
                     ),
-                    TextField(
+                    const MidSizedBoxHeight(),
+                    CustomTextField(
                       controller: _addressController,
-                      decoration: const InputDecoration(labelText: 'Address'),
+                      labelText: 'Address',
+                      obscureText: false,
+                      textInputType: TextInputType.streetAddress,
                     ),
-                    TextField(
+                    const MidSizedBoxHeight(),
+                    CustomTextField(
                       controller: _passwordController,
-                      decoration: const InputDecoration(labelText: 'Password'),
+                      labelText: 'Password',
                       obscureText: true,
+                      textInputType: TextInputType.visiblePassword,
                     ),
+                    const MidSizedBoxHeight(),
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () async {
@@ -140,9 +157,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
                         try {
                           String imageUrl = '';
-                          if (_image != null) {
+                          if (_image != null && imagePath != null) {
                             imageUrl = await authProvider
-                                .uploadProfileImage(_image! as String);
+                                .uploadProfileImage(imagePath!);
                           }
                           await authProvider.signup(
                             _emailController.text,
