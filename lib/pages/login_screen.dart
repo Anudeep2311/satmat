@@ -70,8 +70,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => const SignupScreen()));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const SignupScreen(),
+                        ),
+                      );
                     },
                     child: const Text('Don\'t have an account? Sign up'),
                   ),

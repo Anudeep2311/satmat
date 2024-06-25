@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,13 +9,12 @@ import 'package:newapp/services/auth_service.dart';
 import 'package:newapp/widgets/const_sizedbox.dart';
 import 'package:newapp/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  _SignupScreenState createState() => _SignupScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
 class _SignupScreenState extends State<SignupScreen> {
@@ -89,7 +90,6 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sign Up'),
@@ -156,27 +156,35 @@ class _SignupScreenState extends State<SignupScreen> {
                         });
 
                         try {
-                          String imageUrl = '';
                           if (_image != null && imagePath != null) {
-                            imageUrl = await authProvider
-                                .uploadProfileImage(imagePath!);
+                            if (File(imagePath!).existsSync()) {
+                              await authProvider.signup(
+                                _emailController.text,
+                                _usernameController.text,
+                                _mobileController.text,
+                                _addressController.text,
+                                _passwordController.text,
+                                imagePath!,
+                              );
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (_) => const HomeScreen(),
+                                ),
+                              );
+                            } else {
+                              debugPrint(
+                                  "File does not exist at path: $imagePath");
+                            }
+                          } else {
+                            debugPrint("Image or imagePath is null");
                           }
-                          await authProvider.signup(
-                            _emailController.text,
-                            _usernameController.text,
-                            _mobileController.text,
-                            _addressController.text,
-                            _passwordController.text,
-                            imageUrl,
-                          );
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (_) => const HomeScreen(),
+                        } catch (e) {
+                          debugPrint("Signup Issue: $e");
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Signup Failed: $e'),
                             ),
                           );
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Signup Failed: $e')));
                         } finally {
                           setState(() {
                             _isLoading = false;

@@ -65,7 +65,7 @@ class AuthProvider with ChangeNotifier {
       await _loadUserData();
       notifyListeners();
     } catch (e) {
-      print("Signup Error: $e");
+      debugPrint("Signup Error: $e");
       rethrow;
     }
   }
@@ -80,7 +80,7 @@ class AuthProvider with ChangeNotifier {
       await ref.putFile(File(imagePath));
       return await ref.getDownloadURL();
     } catch (e) {
-      print("Image Upload Error: $e");
+      debugPrint("Image Upload Error: $e");
       rethrow;
     }
   }
