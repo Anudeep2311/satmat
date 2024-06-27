@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:newapp/models/banking_model.dart';
 import 'package:newapp/models/utility_model.dart';
 import 'package:newapp/pages/login_screen.dart';
+import 'package:newapp/services/api/api_service.dart';
 import 'package:newapp/services/auth_service.dart';
 import 'package:newapp/theme/theme_data.dart';
 import 'package:newapp/widgets/banking_container.dart';
@@ -197,8 +198,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            const ListTile(
-              title: Row(
+            ListTile(
+              title: const Row(
                 children: [
                   Icon(
                     Icons.credit_card,
@@ -208,11 +209,48 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 5,
                   ),
                   Text(
-                    "KYC",
+                    "API",
                     style: TextStyle(color: Colors.white),
                   ),
                 ],
               ),
+              onTap: () async {
+                try {
+                  var apiService = ApiService();
+                  var response = await apiService.fetchApiResponse();
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('API RESPONSE'),
+                      content: Text(
+                        response.toString(),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                } catch (e) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("Error"),
+                      content: Text(
+                        e.toString(),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
             ),
             const ListTile(
               title: Row(
